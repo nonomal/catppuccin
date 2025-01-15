@@ -3,46 +3,19 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
-    "categories": {
-      "$id": "#categories",
-      "title": "Categories",
-      "description": "The categories listed in the README",
+    "collaborators": {
+      "$id": "#all-collaborators",
+      "title": "All Collaborators",
+      "description": "Represents all maintainers and contributors to all ports.",
       "type": "array",
-      "items": {
-        "$id": "#categories/item",
-        "title": "Category item",
-        "type": "object",
-        "required": [
-          "key",
-          "name",
-          "emoji"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "key": {
-            "$id": "#categories/category/key",
-            "title": "key",
-            "type": "string",
-            "$ref": "#/$defs/category"
-          },
-          "name": {
-            "$id": "#categories/category/name",
-            "title": "Name",
-            "type": "string"
-          },
-          "emoji": {
-            "$id": "#categories/category/emoji",
-            "title": "Emoji",
-            "type": "string"
-          }
-        }
-      }
+      "minItems": 1,
+      "$ref": "#/$defs/collaborators"
     },
     "ports": {
       "$id": "#ports",
       "title": "Ports",
       "type": "object",
-      "description": "All ports in the catppuccin org.",
+      "description": "All ports in the Catppuccin organisation.",
       "patternProperties": {
         "[A-Za-z0-9_\\-]": {
           "$id": "#ports/port",
@@ -53,102 +26,188 @@
             "nvim"
           ],
           "required": [
-            "category",
+            "categories",
             "name",
-            "platform"
+            "platform",
+            "color",
+            "current-maintainers"
           ],
           "additionalProperties": false,
           "properties": {
             "name": {
-              "$id": "#ports/port/name",
-              "title": "Name",
-              "description": "The Name of the software the port is for.",
-              "type": "string",
-              "examples": [
-                "Neovim"
-              ]
+              "$ref": "#/$defs/port-display-name"
             },
-            "category": {
-              "$id": "#ports/port/category",
-              "title": "Category",
-              "description": "The category that fits the port the most",
-              "$ref": "#/$defs/category"
+            "categories": {
+              "$ref": "#/$defs/port-categories"
             },
             "platform": {
-              "$id": "#ports/port/platform",
-              "title": "Platform",
-              "description": "The platforms the port supports. Either an array of supported operating systems or \"agnostic\" (indicating support for all platforms).",
-              "oneOf": [
-                {
-                  "type": "array",
-                  "items": {
-                    "$id": "#ports/port/platform/os",
-                    "title": "Operating Systems",
-                    "type": "string",
-                    "enum": [
-                      "android",
-                      "ios",
-                      "linux",
-                      "macos",
-                      "windows"
-                    ],
-                    "examples": [
-                      [
-                        "linux",
-                        "macos",
-                        "windows"
-                      ],
-                      [
-                        "android",
-                        "ios"
-                      ]
-                    ]
-                  }
-                },
-                {
-                  "type": "string",
-                  "enum": [
-                    "agnostic"
-                  ]
-                }
-              ]
+              "$ref": "#/$defs/port-platform"
             },
             "color": {
-              "$id": "#ports/port/color",
-              "title": "Color",
-              "description": "The fill color for the icon on the website.",
-              "type": "string",
-              "enum": [
-                "rosewater",
-                "flamingo",
-                "pink",
-                "mauve",
-                "red",
-                "maroon",
-                "peach",
-                "yellow",
-                "green",
-                "teal",
-                "sky",
-                "sapphire",
-                "blue",
-                "lavender",
-                "text"
-              ],
-              "examples": [
-                "pink"
-              ]
+              "$ref": "#/$defs/color"
             },
             "icon": {
-              "$id": "#ports/port/icon",
-              "title": "Icon",
-              "description": "The icon to use on the website. This should be the same name as the SVG file on https://simpleicons.org/. If a `.svg` suffix is present, it's taken from the local website repository resources.",
-              "type": "string",
+              "$ref": "#/$defs/icon"
+            },
+            "alias": {
+              "$id": "#ports/port/alias",
+              "title": "Alias",
+              "description": "If another port provides the theme for this port, provide the name of the other port here (e.g. `vscode` for `azuredatastudio`, where Azure Data Studio uses the VS Code theme).",
+              "type": "string"
+            },
+            "url": {
+              "$id": "#ports/port/url",
+              "title": "URL",
+              "description": "If the port is hosted on a specific URL, provide it here.",
               "examples": [
-                "neovim",
-                "neovim.svg"
-              ]
+                "https://github.com/catppuccin/vscode/tree/compiled"
+              ],
+              "type": "string"
+            },
+            "links": {
+              "$id": "#ports/port/links",
+              "title": "Links",
+              "description": "Links to the port on marketplaces, app stores; documentation, preview pages, etc.",
+              "type": "array",
+              "items": {
+                "$id": "#ports/port/links/item",
+                "title": "Link",
+                "type": "object",
+                "required": [
+                  "name",
+                  "url"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "name": {
+                    "$id": "#ports/port/links/link/name",
+                    "title": "Name",
+                    "type": "string"
+                  },
+                  "color": {
+                    "$ref": "#/$defs/color"
+                  },
+                  "icon": {
+                    "$ref": "#/$defs/icon"
+                  },
+                  "url": {
+                    "$id": "#ports/port/links/link/url",
+                    "title": "URL",
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "upstreamed": {
+              "$id": "#ports/port/upstreamed",
+              "title": "Upstreamed",
+              "description": "Boolean indicating whether the port has been upstreamed.",
+              "type": "boolean"
+            },
+            "current-maintainers": {
+              "$id": "#ports/port/current-maintainers",
+              "title": "Current Maintainers",
+              "description": "List of all active maintainers for this port.",
+              "type": "array",
+              "$ref": "#/$defs/collaborators"
+            },
+            "past-maintainers": {
+              "$id": "#ports/port/past-maintainers",
+              "title": "Past Maintainers",
+              "type": "array",
+              "minItems": 1,
+              "description": "List of all maintainers that have previously maintained this port.",
+              "$ref": "#/$defs/collaborators"
             }
+          }
+        }
+      }
+    },
+    "archived": {
+      "$id": "#archived",
+      "title": "Archived Ports",
+      "description": "All archived ports in the Catppuccin organisation.",
+      "type": "object",
+      "patternProperties": {
+        "[A-Za-z0-9_\\-]": {
+          "$id": "#archived/port/name",
+          "title": "Port",
+          "type": "object",
+          "description": "The GitHub repository name of the archived port.",
+          "examples": [
+            "steam"
+          ],
+          "required": [
+            "name",
+            "reason",
+            "categories",
+            "platform",
+            "color"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/port-display-name"
+            },
+            "reason": {
+              "$id": "#/archived/port/reason",
+              "title": "Archive Reason",
+              "description": "A short summary of why the port was archived.",
+              "type": "string"
+            },
+            "categories": {
+              "$ref": "#/$defs/port-categories"
+            },
+            "platform": {
+              "$ref": "#/$defs/port-platform"
+            },
+            "color": {
+              "$ref": "#/$defs/color"
+            },
+            "icon": {
+              "$ref": "#/$defs/icon"
+            }
+          }
+        }
+      }
+    },
+    "categories": {
+      "$id": "#category-definitions",
+      "title": "Category Definitions",
+      "description": "The categories listed in the README.",
+      "type": "array",
+      "items": {
+        "$id": "#category-definitions/item",
+        "title": "Category Item",
+        "type": "object",
+        "required": [
+          "key",
+          "name",
+          "description",
+          "emoji"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "$id": "#category-definitions/category/key",
+            "title": "key",
+            "type": "string",
+            "$ref": "#/$defs/category"
+          },
+          "name": {
+            "$id": "#category-definitions/category/name",
+            "title": "Name",
+            "type": "string"
+          },
+          "description": {
+            "$id": "#category-definitions/category/description",
+            "title": "Description",
+            "type": "string"
+          },
+          "emoji": {
+            "$id": "#category-definitions/category/emoji",
+            "title": "Emoji",
+            "type": "string"
           }
         }
       }
@@ -189,25 +248,166 @@
     }
   },
   "$defs": {
+    "collaborators": {
+      "$id": "#collaborators",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Display Name",
+            "description": "The display name of the collaborator."
+          },
+          "url": {
+            "type": "string",
+            "title": "GitHub Profile",
+            "description": "The GitHub profile link of the collaborator."
+          }
+        },
+        "required": [
+          "url"
+        ]
+      }
+    },
+    "port-display-name": {
+      "$id": "#port-display-name",
+      "title": "Name",
+      "description": "The name of the software the port is for.",
+      "type": "string",
+      "examples": [
+        "Neovim"
+      ]
+    },
+    "port-categories": {
+      "$id": "#port-categories",
+      "title": "Categories",
+      "description": "The categories that fit the port the most, the first category is the primary category which the port will be listed under on the README.",
+      "$ref": "#/$defs/categories"
+    },
+    "port-platform": {
+      "$id": "#port-platform",
+      "title": "Platform",
+      "description": "The platforms the port supports. Either an array of supported operating systems or \"agnostic\" (indicating support for all platforms).",
+      "oneOf": [
+        {
+          "type": "array",
+          "items": {
+            "$id": "#ports/port/platform/os",
+            "title": "Operating Systems",
+            "type": "string",
+            "enum": [
+              "android",
+              "ios",
+              "linux",
+              "macos",
+              "windows"
+            ],
+            "examples": [
+              [
+                "linux",
+                "macos",
+                "windows"
+              ],
+              [
+                "android",
+                "ios"
+              ]
+            ]
+          }
+        },
+        {
+          "type": "string",
+          "enum": [
+            "agnostic"
+          ]
+        }
+      ]
+    },
+    "icon": {
+      "$id": "#icon",
+      "title": "Icon",
+      "description": "The icon to use on the Catppuccin website. This should be the same name as the SVG file on https://simpleicons.org/. If a `.svg` suffix is present, it's taken from the local website repository resources.",
+      "type": "string",
+      "examples": [
+        "neovim",
+        "neovim.svg"
+      ]
+    },
+    "color": {
+      "$id": "#color",
+      "title": "Color",
+      "description": "The fill color for the icon on the Catppuccin website, which should match the color used by Simple Icons. If the icon does not exist in Simple Icons, choose the most suitable color from the branding.",
+      "type": "string",
+      "enum": [
+        "rosewater",
+        "flamingo",
+        "pink",
+        "mauve",
+        "red",
+        "maroon",
+        "peach",
+        "yellow",
+        "green",
+        "teal",
+        "sky",
+        "sapphire",
+        "blue",
+        "lavender",
+        "text"
+      ],
+      "examples": [
+        "pink"
+      ]
+    },
+    "categories": {
+      "$id": "#categories",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": {
+        "$ref": "#/$defs/category"
+      }
+    },
     "category": {
       "$id": "#category",
       "type": "string",
       "enum": [
+        "3d_modelling",
+        "analytics",
+        "application_launcher",
+        "artificial_intelligence",
+        "boot_loader",
         "browser",
         "browser_extension",
         "cli",
         "code_editor",
+        "desktop_environment",
         "development",
+        "discussion_forum",
+        "document_viewer",
+        "education",
+        "email_client",
+        "entertainment",
+        "file_manager",
         "game",
-        "leisure",
+        "game_development",
+        "health_and_fitness",
         "library",
-        "messaging",
+        "music",
         "note_taking",
+        "notification_daemon",
+        "photo_and_video",
         "productivity",
         "search_engine",
-        "social",
+        "self_hosted",
+        "social_networking",
         "system",
-        "terminal"
+        "terminal",
+        "translation_tool",
+        "userstyle",
+        "wiki",
+        "window_manager"
       ]
     }
   }

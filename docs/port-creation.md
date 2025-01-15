@@ -97,7 +97,7 @@ stateDiagram-v2
 **Q. I have a port that is already themed and ready for review!**
 
 **A.** Port reviews can be raised as an issue
-[here](https://github.com/catppuccin/catppuccin/issues/new?assignees=&template=port+review.yml&title=Name+of+the+application%2Ftool%2Fwebsite%2Fetc.)
+[here](https://github.com/catppuccin/catppuccin/issues/new?assignees=&template=port-review.yml&title=Name+of+the+application%2Ftool%2Fwebsite%2Fetc.)
 since the port is already themed and ready to be reviewed by our
 [staff team](https://github.com/catppuccin/community/#current-structure)!
 
@@ -175,6 +175,7 @@ ensure consistency:
     [catwalk](https://github.com/catppuccin/toolbox#-catwalk). (e.g.
     [vscode](https://github.com/catppuccin/vscode#catppuccin-for-vscode) and
     [discord](https://github.com/catppuccin/discord#catppuccin-for-discord))
+  - Change the preview paths to use [relative links](https://github.blog/2013-01-31-relative-links-in-markup-files/)
   - Add yourself to the **Thanks to** section \<3
 - Ensure uppercase meta files (e.g. `README.md`)
 - Don't add health files (e.g. `CODE_OF_CONDUCT.md`, `SUPPORT.md`), those are
